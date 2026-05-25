@@ -1,0 +1,282 @@
+
+ /* Reset básico de CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #121212; /* Fundo escuro padrão geek */
+            color: #e0e0e0; /* Texto claro */
+            padding: 20px;
+        }
+
+        /* =========================================
+           1. NAVBAR (AZUL ESCURO)
+           ========================================= */
+        .navbar {
+            background-color: #1e1e2f;
+            border: 2px solid #2962ff; /* Borda azul do seu desenho */
+            border-radius: 8px;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2962ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar nav ul li a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .navbar nav ul li a:hover {
+            color: #2962ff;
+        }
+
+        /* =========================================
+           2. BARRA DE PESQUISA (LARANJA)
+           ========================================= */
+        .search-container {
+            display: flex;
+            justify-content: center; /* Centraliza a barra */
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            width: 100%;
+            max-width: 600px; /* Fiz menor como você pediu */
+            border: 2px solid #ff9800; /* Borda laranja do seu desenho */
+            border-radius: 30px;
+            overflow: hidden;
+            background-color: #1e1e2f;
+        }
+
+        .search-box input {
+            flex-grow: 1;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-box button {
+            background-color: #ff9800;
+            border: none;
+            padding: 0 20px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #121212;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .search-box button:hover {
+            background-color: #e68a00;
+        }
+
+        /* =========================================
+           3. DESTAQUE DA SEMANA (AZUL CLARO)
+           ========================================= */
+        .weekly-highlight {
+            display: flex;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+
+        .highlight-image {
+            flex: 1; /* Ocupa metade do espaço */
+            border: 2px solid #00bcd4; /* Borda azul claro do seu desenho */
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.2);
+        }
+
+        .highlight-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            aspect-ratio: 16/9; /* Mantém proporção retangular */
+        }
+
+        .highlight-text {
+            flex: 1; /* Ocupa a outra metade do espaço */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .highlight-text h1 {
+            color: #00bcd4;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .highlight-text p {
+            line-height: 1.6;
+            color: #b0b0b0;
+            font-size: 16px;
+            text-align: justify;
+        }
+
+        /* Responsividade (Para telas menores/celulares) */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .weekly-highlight {
+                flex-direction: column; /* Coloca a imagem em cima do texto no celular */
+            }
+        }
+
+
+        /* Espaçamento entre os blocos da página */
+        .weekly-highlight, .trailer-section {
+            margin-bottom: 50px;
+        }
+
+        /* Classe para inverter os lados (Texto na esquerda, Vídeo na direita) */
+        .row-reverse {
+            flex-direction: row-reverse;
+        }
+
+        /* Ajuste para o vídeo ficar responsivo e manter a proporção de tela */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* Proporção 16:9 */
+            height: 0;
+            overflow: hidden;
+            border: 2px solid #00bcd4; /* Mantém a borda azul claro */
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.2);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+
+        
+        /* =========================================
+           4. SEÇÃO DE PERSONAGENS (GRADE 3x2)
+           ========================================= */
+           .characters-section {
+            max-width: 1200px;
+            margin: 60px auto 30px auto;
+        }
+
+        .characters-section h2 {
+            color: #2962ff; /* Cor azul da sua navbar */
+            font-size: 26px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #2962ff;
+            padding-bottom: 10px;
+        }
+
+        /* Montando o Grid de 3 colunas */
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 colunas de tamanhos iguais */
+            gap: 30px; /* Espaço entre os cards */
+        }
+
+        /* Estrutura do Card de Personagem */
+        .character-card {
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Bloco Superior (Vermelho no seu desenho) */
+        .card-top {
+            background-color: #1e1e2f;
+            border: 3px solid #ff1744; /* Borda vermelha */
+            border-bottom: none; /* Tira a borda de baixo para emendar com o azul */
+            height: 220px; /* Altura para a foto ou destaque */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-top img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        /* Efeito de zoom na imagem quando passa o mouse */
+        .character-card:hover .card-top img {
+            transform: scale(1.08);
+        }
+
+        /* Bloco Inferior (Azul no seu desenho) */
+        .card-bottom {
+            background-color: #161624;
+            border: 3px solid #00bcd4; /* Borda azul claro */
+            padding: 15px;
+            text-align: center;
+        }
+
+        .card-bottom h3 {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .card-bottom p {
+            color: #b0b0b0;
+            font-size: 14px;
+        }
+
+        /* Responsividade: Transforma em 1 coluna no celular e 2 no tablet */
+        @media (max-width: 900px) {
+            .characters-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
