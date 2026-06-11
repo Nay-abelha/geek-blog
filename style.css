@@ -190,11 +190,18 @@
         }
 
 
+<<<<<<< HEAD
         
         /* =========================================
            4. SEÇÃO DE PERSONAGENS (GRADE 3x2)
            ========================================= */
            .characters-section {
+=======
+        /* =========================================
+           4. SEÇÃO DE PERSONAGENS (GRADE 3x2)
+           ========================================= */
+        .characters-section {
+>>>>>>> bf59f58972a416c6aa6434be40cb5a021d709a6f
             max-width: 1200px;
             margin: 60px auto 30px auto;
         }
