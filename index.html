@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Geek</title>
     <link rel="stylesheet" href="style.css">
-    
 </head>
 <body>
 
@@ -48,7 +47,6 @@
     </main>
 
     <section class="weekly-highlight row-reverse">
-        
         <div class="highlight-image">
             <img src="https://rollingstone.com.br/wp-content/uploads/2025/07/o-doutor-destino-vivido-por-robert-downey-jr-aparece-em-quarteto-fantastico-primeiros-passos-2163995107.jpg" alt="Doutor Destino">
         </div>
@@ -62,9 +60,50 @@
                 Clique na imagem ao lado para conferir todos os detalhes do trailer e as principais revelações. 
             </p>
         </div>
-
     </section>
 
+    <div id="posts-do-banco"></div>
+
+    <script>
+        async function carregarPostsDoBanco() {
+            try {
+                // 1. Busca os posts no Node.js
+                const resposta = await fetch('http://localhost:3000/api/posts');
+                const posts = await resposta.json();
+
+                console.log('Posts vindos do banco MySQL:', posts);
+
+                // 2. Se houver posts no banco, adiciona eles na tela
+                if (posts && posts.length > 0) {
+                    const container = document.getElementById('posts-do-banco');
+                    
+                    posts.forEach((post, index) => {
+                        // Alterna a posição da imagem (linha invertida) para manter o padrão visual do blog
+                        const classeInversao = index % 2 === 0 ? '' : 'row-reverse';
+
+                        const novoPostHTML = `
+                            <section class="weekly-highlight ${classeInversao}">
+                                <div class="highlight-image">
+                                    <img src="${post.imagem_capa_url}" alt="${post.titulo}">
+                                </div>
+                                <div class="highlight-text">
+                                    <h1>${post.titulo}</h1>
+                                    <p>${post.conteudo}</p>
+                                </div>
+                            </section>
+                        `;
+
+                        container.innerHTML += novoPostHTML;
+                    });
+                }
+            } catch (erro) {
+                console.error('Erro ao buscar dados do banco:', erro);
+            }
+        }
+
+        // Executa ao carregar a página
+        carregarPostsDoBanco();
+    </script>
 
 </body>
 </html>

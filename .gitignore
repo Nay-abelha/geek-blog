@@ -1,0 +1,7 @@
+# Ignorar pasta de bibliotecas do Node.js
+node_modules/
+backend/node_modules/
+
+# Ignorar arquivo de senhas e credenciais do banco
+.env
+backend/.env

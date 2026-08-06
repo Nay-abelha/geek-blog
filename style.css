@@ -312,3 +312,95 @@ img, iframe {
                 grid-template-columns: 1fr;
             }
         }
+
+
+        /* --- TELA DE LOGIN --- */
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Centraliza verticalmente na tela */
+    padding: 20px;
+}
+
+.login-card {
+    background-color: #1a1a1a; /* Fundo escuro combinando com o tema geek */
+    color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 400px; /* Largura máxima ideal no Desktop */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login-card h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #00d2ff; /* Tom azul de destaque do seu tema */
+}
+
+.login-card p {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 10px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    text-align: left;
+}
+
+.input-group label {
+    font-size: 0.9rem;
+    color: #ddd;
+}
+
+.input-group input {
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background-color: #2b2b2b;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #00d2ff;
+}
+
+.btn-login {
+    background-color: #00d2ff;
+    color: #000;
+    border: none;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s;
+}
+
+.btn-login:hover {
+    background-color: #0099cc;
+}
+
+/* Ajustes Responsivos para Telas Pequenas */
+@media (max-width: 480px) {
+    .login-card {
+        padding: 20px; /* Menos espaçamento nas bordas do celular */
+    }
+
+    .btn-login, .input-group input {
+        padding: 14px; /* Aumenta a área de toque para facilitar no toque do celular */
+        font-size: 1.05rem;
+    }
+}
