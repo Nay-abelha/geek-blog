@@ -96,9 +96,9 @@
             background-color: #e68a00;
         }
 
-        /* =========================================
-           3. DESTAQUE DA SEMANA (AZUL CLARO)
-           ========================================= */
+/* =========================================
+   3. DESTAQUE DA SEMANA (AZUL CLARO)
+========================================= */
         .weekly-highlight {
             display: flex;
             gap: 30px;
@@ -169,31 +169,63 @@
             flex-direction: row-reverse;
         }
 
-        /* Ajuste para o vídeo ficar responsivo e manter a proporção de tela */
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* Proporção 16:9 */
-            height: 0;
-            overflow: hidden;
-            border: 2px solid #00bcd4; /* Mantém a borda azul claro */
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 188, 212, 0.2);
-        }
+/* --- ESTILOS BASE/DESKTOP --- */
 
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
+/* Garante que imagens e iFrames fiquem contidos no tamanho da tela */
+img, iframe {
+    max-width: 100%;
+    height: auto;
+    border: none;
+}
+
+/* Container do vídeo/imagem responsivo */
+.video-container {
+    width: 100%;
+    position: relative;
+}
+
+.video-container iframe {
+    width: 100%;
+    min-height: 250px; /* Garante uma altura visível */
+}
+
+/* Layout Flexbox padronizado */
+.weekly-highlight {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Inverte a ordem do segundo bloco no desktop se desejar */
+.row-reverse {
+    flex-direction: row-reverse;
+}
+
+/* --- RESPONSIVIDADE (Telas de até 768px - Celulares e Tablets) --- */
+@media (max-width: 768px) {
+    /* Muda a direção de lado a lado (row) para pilha (column) */
+    .weekly-highlight, 
+    .weekly-highlight.row-reverse {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    /* O texto ocupa 100% da largura no mobile */
+    .highlight-text {
+        width: 100%;
+    }
+
+    /* O elemento do vídeo/imagem ocupa toda a largura */
+    .weekly-highlight > div {
+        width: 100% !important;
+    }
+}
 
 
-        
-        /* =========================================
-           4. SEÇÃO DE PERSONAGENS (GRADE 3x2)
-           ========================================= */
+/* =========================================
+    4. SEÇÃO DE PERSONAGENS (GRADE 3x2)
+/* ========================================= */
            .characters-section {
             max-width: 1200px;
             margin: 60px auto 30px auto;
