@@ -1,1 +1,26 @@
 # geek-blog
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Geek</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">GeekBlog</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li> |
+                <li><a href="Personagens.html">Personagens</a></li> |
+                <li><a href="hqs.html">Promoções de HQs</a></li> |
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+        </nav>
+    </header>
+
+</body>
+</html>

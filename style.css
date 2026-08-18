@@ -404,3 +404,101 @@ img, iframe {
         font-size: 1.05rem;
     }
 }
+
+
+/*pagina de cadastro*/
+
+
+/* =========================================
+   5. PÁGINA DE CADASTRO
+========================================= */
+
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+}
+
+.register-card {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.register-card .title-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.register-card h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #00d2ff;
+}
+
+.register-card p.subtitle {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 5px;
+}
+
+.register-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.btn-register {
+    background-color: #00d2ff;
+    color: #000;
+    border: none;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: background-color 0.2s;
+}
+
+.btn-register:hover {
+    background-color: #0099cc;
+}
+
+.register-footer {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-top: 10px;
+}
+
+.register-footer a {
+    color: #00d2ff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .register-card {
+        padding: 20px;
+    }
+
+    .btn-register {
+        padding: 14px;
+        font-size: 1.05rem;
+    }
+}
