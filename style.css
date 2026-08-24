@@ -502,3 +502,13 @@ img, iframe {
         font-size: 1.05rem;
     }
 }
+
+
+/* grade da pagina sobre*/
+
+   /* Montando o Grid de 2 colunas */
+    .characters-grid2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 3 colunas de tamanhos iguais */
+    gap: 30px; /* Espaço entre os cards */
+}
