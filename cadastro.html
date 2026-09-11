@@ -24,30 +24,40 @@
         <div class="register-card">
             <div class="title-container">
                 <h2>Criar Conta</h2>
-                <span style="font-size: 1.5rem;">🚀</span>
+                <span class="emoji">🚀</span>
             </div>
             <p class="subtitle">Cadastre-se para gerenciar e postar no blog</p>
 
-            <form action="#" method="POST">
+            <form id="form-cadastro">
                 <div class="input-group">
                     <label for="nome">Nome Completo</label>
                     <input type="text" id="nome" name="nome" placeholder="Seu nome" required>
                 </div>
 
                 <div class="input-group">
-                    <label for="email">E-mail ou Usuário</label>
-                    <input type="text" id="email" name="email" placeholder="seuemail@geek.com" required>
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="seuemail@geek.com" required>
                 </div>
 
                 <div class="input-group">
                     <label for="senha">Senha</label>
-                    <input type="password" id="senha" name="senha" placeholder="••••••••" required>
+                    <input type="password" id="senha" name="senha" placeholder="••••••••" minlength="6" required>
                 </div>
 
                 <div class="input-group">
                     <label for="confirmar-senha">Confirmar Senha</label>
-                    <input type="password" id="confirmar-senha" name="confirmar-senha" placeholder="••••••••" required>
+                    <input type="password" id="confirmar-senha" name="confirmar-senha" placeholder="••••••••" minlength="6" required>
                 </div>
+
+                <div class="input-group consentimento-group">
+                    <input type="checkbox" id="consentimento" name="consentimento" required>
+                    <label for="consentimento">
+                        Li e aceito a <a href="privacidade.html" target="_blank">Política de Privacidade</a> e autorizo o tratamento dos meus dados pessoais conforme a LGPD (Lei nº 13.709/2018). *
+                    </label>
+                </div>
+
+                <div id="mensagem-erro" class="mensagem-erro"></div>
+                <div id="mensagem-sucesso" class="mensagem-sucesso"></div>
 
                 <button type="submit" class="btn-register">Finalizar Cadastro</button>
             </form>
@@ -57,6 +67,69 @@
             </p>
         </div>
     </main>
+
+    <script>
+        document.getElementById('form-cadastro').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+            const confirmarSenha = document.getElementById('confirmar-senha').value;
+            const consentimento = document.getElementById('consentimento').checked;
+
+            const mensagemErro = document.getElementById('mensagem-erro');
+            const mensagemSucesso = document.getElementById('mensagem-sucesso');
+            mensagemErro.style.display = 'none';
+            mensagemSucesso.style.display = 'none';
+
+            // Validações
+            if (senha !== confirmarSenha) {
+                mensagemErro.textContent = 'As senhas não coincidem.';
+                mensagemErro.style.display = 'block';
+                return;
+            }
+
+            if (senha.length < 6) {
+                mensagemErro.textContent = 'A senha deve ter pelo menos 6 caracteres.';
+                mensagemErro.style.display = 'block';
+                return;
+            }
+
+            if (!consentimento) {
+                mensagemErro.textContent = 'Você deve aceitar a Política de Privacidade para se cadastrar.';
+                mensagemErro.style.display = 'block';
+                return;
+            }
+
+            try {
+                const resposta = await fetch('http://localhost:3000/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nome, email, senha })
+                });
+
+                const dados = await resposta.json();
+
+                if (resposta.ok) {
+                    mensagemSucesso.textContent = '✅ Cadastro realizado com sucesso! Redirecionando para o login...';
+                    mensagemSucesso.style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    mensagemErro.textContent = dados.mensagem || 'Erro ao cadastrar. Tente novamente.';
+                    mensagemErro.style.display = 'block';
+                }
+            } catch (erro) {
+                console.error('Erro:', erro);
+                mensagemErro.textContent = 'Erro de conexão com o servidor. Verifique se o backend está rodando.';
+                mensagemErro.style.display = 'block';
+            }
+        });
+    </script>
 
 </body>
 </html>

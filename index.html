@@ -16,7 +16,7 @@
                 <li><a href="Personagens.html">Personagens</a></li> |
                 <li><a href="hqs.html">Promoções de HQs</a></li> |
                 <li><a href="sobre.html">Sobre</a></li>
-                <li><a href="login.html">login</a></li>
+                <li><a href="login.html">Login</a></li>
             </ul>
         </nav>
     </header>
@@ -65,36 +65,81 @@
 
     <div id="posts-do-banco"></div>
 
+    <!-- Banner de Cookies (LGPD) -->
+    <div class="cookie-banner" id="cookie-banner">
+        <p>
+            🍪 Utilizamos cookies para melhorar sua experiência de navegação. Ao continuar, você concorda com nossa 
+            <a href="privacidade.html">Política de Privacidade</a> e com o uso de cookies.
+        </p>
+        <button onclick="aceitarCookies()">Aceitar</button>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <p>© 2026 GeekBlog - Todos os direitos reservados</p>
+        <p>
+            <a href="privacidade.html">Política de Privacidade</a> |
+            <a href="direitos.html">Direitos do Titular (LGPD)</a> |
+            <a href="sobre.html">Sobre</a>
+        </p>
+    </footer>
+
     <script>
+        // =========================================
+        // BANNER DE COOKIES (LGPD)
+        // =========================================
+        function aceitarCookies() {
+            localStorage.setItem('cookies_aceitos', 'true');
+            document.getElementById('cookie-banner').style.display = 'none';
+        }
+
+        // Verifica se o usuário já aceitou os cookies
+        if (localStorage.getItem('cookies_aceitos') === 'true') {
+            document.getElementById('cookie-banner').style.display = 'none';
+        }
+
+        // =========================================
+        // CARREGAR POSTS DO BANCO (com sanitização XSS)
+        // =========================================
         async function carregarPostsDoBanco() {
             try {
-                // 1. Busca os posts no Node.js
                 const resposta = await fetch('http://localhost:3000/api/posts');
                 const posts = await resposta.json();
 
                 console.log('Posts vindos do banco MySQL:', posts);
 
-                // 2. Se houver posts no banco, adiciona eles na tela
                 if (posts && posts.length > 0) {
                     const container = document.getElementById('posts-do-banco');
                     
                     posts.forEach((post, index) => {
-                        // Alterna a posição da imagem (linha invertida) para manter o padrão visual do blog
                         const classeInversao = index % 2 === 0 ? '' : 'row-reverse';
 
-                        const novoPostHTML = `
-                            <section class="weekly-highlight ${classeInversao}">
-                                <div class="highlight-image">
-                                    <img src="${post.imagem_capa_url}" alt="${post.titulo}">
-                                </div>
-                                <div class="highlight-text">
-                                    <h1>${post.titulo}</h1>
-                                    <p>${post.conteudo}</p>
-                                </div>
-                            </section>
-                        `;
+                        // Cria o elemento section
+                        const section = document.createElement('section');
+                        section.className = `weekly-highlight ${classeInversao}`;
 
-                        container.innerHTML += novoPostHTML;
+                        // Cria o div da imagem
+                        const divImagem = document.createElement('div');
+                        divImagem.className = 'highlight-image';
+                        const img = document.createElement('img');
+                        img.src = post.imagem_capa_url || 'https://via.placeholder.com/800x450?text=GeekBlog';
+                        img.alt = post.titulo;
+                        divImagem.appendChild(img);
+
+                        // Cria o div do texto
+                        const divTexto = document.createElement('div');
+                        divTexto.className = 'highlight-text';
+                        const h1 = document.createElement('h1');
+                        h1.textContent = post.titulo; // textContent previne XSS
+                        const p = document.createElement('p');
+                        p.textContent = post.conteudo; // textContent previne XSS
+                        divTexto.appendChild(h1);
+                        divTexto.appendChild(p);
+
+                        // Monta a estrutura
+                        section.appendChild(divImagem);
+                        section.appendChild(divTexto);
+                        container.appendChild(section);
                     });
                 }
             } catch (erro) {

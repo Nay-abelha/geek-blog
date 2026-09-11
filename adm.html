@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Geek</title>
+    <title>Painel Admin - GeekBlog</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,12 +20,508 @@
         </nav>
     </header>
 
+    <main class="admin-container" id="admin-container">
+        <!-- Conteúdo será carregado via JavaScript -->
+    </main>
 
+    <script>
+        // Verifica se o usuário está autenticado
+        const token = localStorage.getItem('token');
+        const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
 
+        const container = document.getElementById('admin-container');
 
+        if (!token || !usuario) {
+            // Usuário não autenticado
+            container.innerHTML = `
+                <div class="login-required">
+                    <h2>🔒 Acesso Restrito</h2>
+                    <p>Você precisa estar logado para acessar o painel administrativo.</p>
+                    <p class="login-required-links">
+                        <a href="login.html">Fazer Login</a> | 
+                        <a href="cadastro.html">Criar Conta</a>
+                    </p>
+                </div>
+            `;
+        } else {
+            // Usuário autenticado - mostra o painel
+            container.innerHTML = `
+                <div class="admin-header">
+                    <h1>📝 Painel Administrativo</h1>
+                    <div>
+                        <span class="admin-user">👤 ${usuario.nome} (${usuario.role})</span>
+                        <button class="btn-logout" onclick="logout()">Sair</button>
+                    </div>
+                </div>
 
+                <!-- Abas de navegação -->
+                <div class="admin-tabs">
+                    <button class="admin-tab active" data-tab="posts" onclick="mudarAba('posts')">📄 Postagens</button>
+                    <button class="admin-tab" data-tab="personagens" onclick="mudarAba('personagens')">🦸 Personagens</button>
+                </div>
 
-    
+                <!-- ===== ABA DE POSTAGENS ===== -->
+                <div id="aba-posts" class="admin-tab-content active">
+                    <h2>✍️ Criar Nova Postagem</h2>
+
+                    <form id="form-post">
+                        <div class="form-group">
+                            <label for="titulo">Título *</label>
+                            <input type="text" id="titulo" placeholder="Título da postagem" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="slug">Slug (URL amigável) *</label>
+                            <input type="text" id="slug" placeholder="ex: novo-trailer-vingadores" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="conteudo">Conteúdo *</label>
+                            <textarea id="conteudo" placeholder="Escreva o conteúdo da postagem..." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="imagem_capa_url">URL da Imagem de Capa</label>
+                            <input type="url" id="imagem_capa_url" placeholder="https://exemplo.com/imagem.jpg">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="categoria_id">Categoria</label>
+                            <select id="categoria_id">
+                                <option value="">Selecione uma categoria</option>
+                                <option value="1">Notícias</option>
+                                <option value="2">HQs</option>
+                                <option value="3">Filmes</option>
+                                <option value="4">Personagens</option>
+                            </select>
+                        </div>
+
+                        <div id="mensagem-post" class="mensagem"></div>
+
+                        <button type="submit" class="btn-admin" id="btn-submit-post">Publicar Post</button>
+                        <button type="button" class="btn-cancelar" id="btn-cancelar-edicao-post" style="display:none;" onclick="cancelarEdicaoPost()">Cancelar Edição</button>
+                    </form>
+
+                    <h2>📄 Meus Posts</h2>
+                    <div id="meus-posts">
+                        <p class="admin-post-card texto-carregando">Carregando posts...</p>
+                    </div>
+                </div>
+
+                <!-- ===== ABA DE PERSONAGENS ===== -->
+                <div id="aba-personagens" class="admin-tab-content">
+                    <h2>🦸 Criar Novo Personagem</h2>
+
+                    <form id="form-personagem">
+                        <div class="form-group">
+                            <label for="nome-personagem">Nome *</label>
+                            <input type="text" id="nome-personagem" placeholder="Nome do personagem" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editora-personagem">Editora *</label>
+                            <input type="text" id="editora-personagem" placeholder="Ex: Marvel Comics, DC Comics" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descricao-personagem">Descrição</label>
+                            <textarea id="descricao-personagem" placeholder="Descreva o personagem..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="imagem-personagem">URL da Imagem</label>
+                            <input type="url" id="imagem-personagem" placeholder="https://exemplo.com/personagem.jpg">
+                        </div>
+
+                        <div id="mensagem-personagem" class="mensagem"></div>
+
+                        <button type="submit" class="btn-admin" id="btn-submit-personagem">Adicionar Personagem</button>
+                        <button type="button" class="btn-cancelar" id="btn-cancelar-edicao-personagem" style="display:none;" onclick="cancelarEdicaoPersonagem()">Cancelar Edição</button>
+                    </form>
+
+                    <h2>🦸 Personagens Cadastrados</h2>
+                    <div id="lista-personagens">
+                        <p class="admin-post-card texto-carregando">Carregando personagens...</p>
+                    </div>
+                </div>
+            `;
+
+            // Variáveis de controle de edição
+            let postEditandoId = null;
+            let personagemEditandoId = null;
+
+            // ===== FUNÇÕES DE ABAS =====
+            window.mudarAba = function(aba) {
+                // Atualiza os botões das abas
+                document.querySelectorAll('.admin-tab').forEach(tab => {
+                    tab.classList.toggle('active', tab.dataset.tab === aba);
+                });
+
+                // Mostra/esconde os conteúdos
+                document.getElementById('aba-posts').classList.toggle('active', aba === 'posts');
+                document.getElementById('aba-personagens').classList.toggle('active', aba === 'personagens');
+
+                // Recarrega os dados da aba ativa
+                if (aba === 'posts') {
+                    carregarMeusPosts();
+                } else {
+                    carregarPersonagens();
+                }
+            };
+
+            // ===== FUNÇÕES DE POSTAGENS =====
+
+            // Adiciona o evento de submit do formulário de post
+            document.getElementById('form-post').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const titulo = document.getElementById('titulo').value;
+                const slug = document.getElementById('slug').value;
+                const conteudo = document.getElementById('conteudo').value;
+                const imagem_capa_url = document.getElementById('imagem_capa_url').value;
+                const categoria_id = document.getElementById('categoria_id').value;
+
+                const mensagem = document.getElementById('mensagem-post');
+                mensagem.className = 'mensagem';
+                mensagem.style.display = 'none';
+
+                try {
+                    let resposta;
+                    const dados = {
+                        titulo,
+                        slug,
+                        conteudo,
+                        imagem_capa_url,
+                        categoria_id: categoria_id ? parseInt(categoria_id) : null
+                    };
+
+                    if (postEditandoId) {
+                        // Modo edição - PUT
+                        resposta = await fetch(`http://localhost:3000/api/posts/${postEditandoId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify(dados)
+                        });
+                    } else {
+                        // Modo criação - POST
+                        resposta = await fetch('http://localhost:3000/api/posts', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify(dados)
+                        });
+                    }
+
+                    const dadosResposta = await resposta.json();
+
+                    if (resposta.ok) {
+                        mensagem.textContent = postEditandoId ? '✅ Post atualizado com sucesso!' : '✅ Post publicado com sucesso!';
+                        mensagem.className = 'mensagem sucesso';
+                        mensagem.style.display = 'block';
+                        this.reset();
+                        cancelarEdicaoPost();
+                        carregarMeusPosts();
+                    } else {
+                        mensagem.textContent = dadosResposta.mensagem || 'Erro ao salvar post.';
+                        mensagem.className = 'mensagem erro';
+                        mensagem.style.display = 'block';
+                    }
+                } catch (erro) {
+                    console.error('Erro:', erro);
+                    mensagem.textContent = 'Erro de conexão com o servidor.';
+                    mensagem.className = 'mensagem erro';
+                    mensagem.style.display = 'block';
+                }
+            });
+
+            // Carrega os posts do usuário
+            async function carregarMeusPosts() {
+                const containerPosts = document.getElementById('meus-posts');
+                if (!containerPosts) return;
+
+                try {
+                    const resposta = await fetch('http://localhost:3000/api/posts');
+                    const posts = await resposta.json();
+
+                    if (posts.length === 0) {
+                        containerPosts.innerHTML = '<p class="admin-post-card texto-carregando">Nenhum post publicado ainda.</p>';
+                        return;
+                    }
+
+                    containerPosts.innerHTML = posts.map(post => `
+                        <div class="admin-post-card">
+                            <div class="admin-post-header">
+                                <h3>${post.titulo}</h3>
+                                <div class="admin-post-acoes">
+                                    <button class="btn-editar" onclick="editarPost(${post.id})">✏️ Editar</button>
+                                    <button class="btn-excluir" onclick="excluirPost(${post.id})">🗑️ Excluir</button>
+                                </div>
+                            </div>
+                            <p>Por ${post.autor || 'Desconhecido'} | ${post.categoria || 'Sem categoria'} | ${new Date(post.criado_em).toLocaleDateString('pt-BR')}</p>
+                            <p class="admin-post-resumo">${post.conteudo.substring(0, 150)}${post.conteudo.length > 150 ? '...' : ''}</p>
+                        </div>
+                    `).join('');
+                } catch (erro) {
+                    console.error('Erro ao carregar posts:', erro);
+                    containerPosts.innerHTML = '<p class="admin-post-card texto-erro">Erro ao carregar posts.</p>';
+                }
+            }
+
+            // Função para editar post
+            window.editarPost = async function(id) {
+                try {
+                    const resposta = await fetch(`http://localhost:3000/api/posts/${id}`);
+                    const post = await resposta.json();
+
+                    if (!resposta.ok) {
+                        alert(post.mensagem || 'Erro ao buscar post.');
+                        return;
+                    }
+
+                    // Preenche o formulário
+                    document.getElementById('titulo').value = post.titulo;
+                    document.getElementById('slug').value = post.slug;
+                    document.getElementById('conteudo').value = post.conteudo;
+                    document.getElementById('imagem_capa_url').value = post.imagem_capa_url || '';
+                    document.getElementById('categoria_id').value = post.categoria_id || '';
+
+                    // Muda para o modo edição
+                    postEditandoId = id;
+                    document.getElementById('btn-submit-post').textContent = '💾 Salvar Alterações';
+                    document.getElementById('btn-cancelar-edicao-post').style.display = 'inline-block';
+                    document.querySelector('.admin-tab[data-tab="posts"]').scrollIntoView({ behavior: 'smooth' });
+
+                    // Limpa mensagens
+                    const mensagem = document.getElementById('mensagem-post');
+                    mensagem.className = 'mensagem';
+                    mensagem.style.display = 'none';
+                } catch (erro) {
+                    console.error('Erro ao buscar post:', erro);
+                    alert('Erro de conexão com o servidor.');
+                }
+            };
+
+            // Função para cancelar edição de post
+            window.cancelarEdicaoPost = function() {
+                postEditandoId = null;
+                document.getElementById('form-post').reset();
+                document.getElementById('btn-submit-post').textContent = 'Publicar Post';
+                document.getElementById('btn-cancelar-edicao-post').style.display = 'none';
+                const mensagem = document.getElementById('mensagem-post');
+                mensagem.className = 'mensagem';
+                mensagem.style.display = 'none';
+            };
+
+            // Função para excluir post
+            window.excluirPost = async function(id) {
+                if (!confirm('Tem certeza que deseja excluir este post?')) return;
+
+                try {
+                    const resposta = await fetch(`http://localhost:3000/api/posts/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    const dados = await resposta.json();
+
+                    if (resposta.ok) {
+                        alert('✅ ' + dados.mensagem);
+                        carregarMeusPosts();
+                    } else {
+                        alert('❌ ' + (dados.mensagem || 'Erro ao excluir post.'));
+                    }
+                } catch (erro) {
+                    console.error('Erro ao excluir post:', erro);
+                    alert('Erro de conexão com o servidor.');
+                }
+            };
+
+            // ===== FUNÇÕES DE PERSONAGENS =====
+
+            // Adiciona o evento de submit do formulário de personagem
+            document.getElementById('form-personagem').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const nome = document.getElementById('nome-personagem').value;
+                const editora = document.getElementById('editora-personagem').value;
+                const descricao = document.getElementById('descricao-personagem').value;
+                const imagem_url = document.getElementById('imagem-personagem').value;
+
+                const mensagem = document.getElementById('mensagem-personagem');
+                mensagem.className = 'mensagem';
+                mensagem.style.display = 'none';
+
+                try {
+                    let resposta;
+                    const dados = { nome, editora, descricao, imagem_url };
+
+                    if (personagemEditandoId) {
+                        // Modo edição - PUT
+                        resposta = await fetch(`http://localhost:3000/api/personagens/${personagemEditandoId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify(dados)
+                        });
+                    } else {
+                        // Modo criação - POST
+                        resposta = await fetch('http://localhost:3000/api/personagens', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify(dados)
+                        });
+                    }
+
+                    const dadosResposta = await resposta.json();
+
+                    if (resposta.ok) {
+                        mensagem.textContent = personagemEditandoId ? '✅ Personagem atualizado com sucesso!' : '✅ Personagem adicionado com sucesso!';
+                        mensagem.className = 'mensagem sucesso';
+                        mensagem.style.display = 'block';
+                        this.reset();
+                        cancelarEdicaoPersonagem();
+                        carregarPersonagens();
+                    } else {
+                        mensagem.textContent = dadosResposta.mensagem || 'Erro ao salvar personagem.';
+                        mensagem.className = 'mensagem erro';
+                        mensagem.style.display = 'block';
+                    }
+                } catch (erro) {
+                    console.error('Erro:', erro);
+                    mensagem.textContent = 'Erro de conexão com o servidor.';
+                    mensagem.className = 'mensagem erro';
+                    mensagem.style.display = 'block';
+                }
+            });
+
+            // Carrega os personagens
+            async function carregarPersonagens() {
+                const containerPersonagens = document.getElementById('lista-personagens');
+                if (!containerPersonagens) return;
+
+                try {
+                    const resposta = await fetch('http://localhost:3000/api/personagens');
+                    const personagens = await resposta.json();
+
+                    if (personagens.length === 0) {
+                        containerPersonagens.innerHTML = '<p class="admin-post-card texto-carregando">Nenhum personagem cadastrado ainda.</p>';
+                        return;
+                    }
+
+                    containerPersonagens.innerHTML = personagens.map(personagem => `
+                        <div class="admin-post-card admin-personagem-card">
+                            <div class="admin-personagem-info">
+                                ${personagem.imagem_url ? `<img src="${personagem.imagem_url}" alt="${personagem.nome}" class="admin-personagem-img">` : '<div class="admin-personagem-img admin-personagem-img-placeholder">🦸</div>'}
+                                <div class="admin-personagem-detalhes">
+                                    <h3>${personagem.nome}</h3>
+                                    <p><strong>Editora:</strong> ${personagem.editora}</p>
+                                    ${personagem.descricao ? `<p class="admin-post-resumo">${personagem.descricao.substring(0, 120)}${personagem.descricao.length > 120 ? '...' : ''}</p>` : ''}
+                                </div>
+                            </div>
+                            <div class="admin-post-acoes">
+                                <button class="btn-editar" onclick="editarPersonagem(${personagem.id})">✏️ Editar</button>
+                                <button class="btn-excluir" onclick="excluirPersonagem(${personagem.id})">🗑️ Excluir</button>
+                            </div>
+                        </div>
+                    `).join('');
+                } catch (erro) {
+                    console.error('Erro ao carregar personagens:', erro);
+                    containerPersonagens.innerHTML = '<p class="admin-post-card texto-erro">Erro ao carregar personagens.</p>';
+                }
+            }
+
+            // Função para editar personagem
+            window.editarPersonagem = async function(id) {
+                try {
+                    const resposta = await fetch(`http://localhost:3000/api/personagens/${id}`);
+                    const personagem = await resposta.json();
+
+                    if (!resposta.ok) {
+                        alert(personagem.mensagem || 'Erro ao buscar personagem.');
+                        return;
+                    }
+
+                    // Preenche o formulário
+                    document.getElementById('nome-personagem').value = personagem.nome;
+                    document.getElementById('editora-personagem').value = personagem.editora;
+                    document.getElementById('descricao-personagem').value = personagem.descricao || '';
+                    document.getElementById('imagem-personagem').value = personagem.imagem_url || '';
+
+                    // Muda para o modo edição
+                    personagemEditandoId = id;
+                    document.getElementById('btn-submit-personagem').textContent = '💾 Salvar Alterações';
+                    document.getElementById('btn-cancelar-edicao-personagem').style.display = 'inline-block';
+                    document.querySelector('.admin-tab[data-tab="personagens"]').scrollIntoView({ behavior: 'smooth' });
+
+                    // Limpa mensagens
+                    const mensagem = document.getElementById('mensagem-personagem');
+                    mensagem.className = 'mensagem';
+                    mensagem.style.display = 'none';
+                } catch (erro) {
+                    console.error('Erro ao buscar personagem:', erro);
+                    alert('Erro de conexão com o servidor.');
+                }
+            };
+
+            // Função para cancelar edição de personagem
+            window.cancelarEdicaoPersonagem = function() {
+                personagemEditandoId = null;
+                document.getElementById('form-personagem').reset();
+                document.getElementById('btn-submit-personagem').textContent = 'Adicionar Personagem';
+                document.getElementById('btn-cancelar-edicao-personagem').style.display = 'none';
+                const mensagem = document.getElementById('mensagem-personagem');
+                mensagem.className = 'mensagem';
+                mensagem.style.display = 'none';
+            };
+
+            // Função para excluir personagem
+            window.excluirPersonagem = async function(id) {
+                if (!confirm('Tem certeza que deseja excluir este personagem?')) return;
+
+                try {
+                    const resposta = await fetch(`http://localhost:3000/api/personagens/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    const dados = await resposta.json();
+
+                    if (resposta.ok) {
+                        alert('✅ ' + dados.mensagem);
+                        carregarPersonagens();
+                    } else {
+                        alert('❌ ' + (dados.mensagem || 'Erro ao excluir personagem.'));
+                    }
+                } catch (erro) {
+                    console.error('Erro ao excluir personagem:', erro);
+                    alert('Erro de conexão com o servidor.');
+                }
+            };
+
+            // Carrega os posts inicialmente
+            carregarMeusPosts();
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('usuario');
+            window.location.href = 'login.html';
+        }
+    </script>
 
 </body>
 </html>

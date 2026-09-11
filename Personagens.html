@@ -22,79 +22,86 @@
 
     <div class="search-container">
         <div class="search-box">
-            <input type="text" placeholder="Pesquisar HQs, personagens, notícias...">
-            <button type="submit">🔍</button>
+            <input type="text" id="input-busca" placeholder="Pesquisar HQs, personagens, notícias...">
+            <button type="submit" onclick="buscarPersonagens()">🔍</button>
         </div>
     </div>
-
 
     <section class="characters-section">
         <h2>Personagens Mais Procurados</h2>
         
-        <div class="characters-grid">
-            
-            <div class="character-card">
-                <div class="card-top">
-                    <img src="https://rollingstone.com.br/wp-content/uploads/cropped-homem-aranha-original-reproducao.jpg" alt="Personagem">
-                </div>
-                <div class="card-bottom">
-                    <h3>Homem-Aranha</h3>
-                    <p>Marvel Comics</p>
-                </div>
-            </div>
-
-            <div class="character-card">
-                <div class="card-top">
-                    <img src="https://blog.pensanddolls.com.br/wp-content/uploads/2023/01/Conheca-a-historia-do-Batman-scaled.jpg" alt="Personagem">
-                </div>
-                <div class="card-bottom">
-                    <h3>Batman</h3>
-                    <p>DC Comics</p>
-                </div>
-            </div>
-
-            <div class="character-card">
-                <div class="card-top">
-                    <img src="https://rollingstone.com.br/wp-content/uploads/img-1026415-wolverine1.jpg" alt="Personagem">
-                </div>
-                <div class="card-bottom">
-                    <h3>Wolverine</h3>
-                    <p>Marvel Comics</p>
-                </div>
-            </div>
-
-            <div class="character-card">
-                <div class="card-top">
-                    <img src="https://www.planocritico.com/wp-content/uploads/2025/04/mulher_maravilha_absoluta_absolute_wonder_woman_vol_1_a_ultima_amazona_plano_critico.jpg" alt="Personagem">
-                </div>
-                <div class="card-bottom">
-                    <h3>Mulher-Maravilha</h3>
-                    <p>DC Comics</p>
-                </div>
-            </div>
-
-            <div class="character-card">
-                <div class="card-top">
-                    <img src="https://nerdizmo.ig.com.br/wp-content/uploads/2021/06/habilidade-grotesca-de-deadpool-capa.jpg" alt="Personagem">
-                </div>
-                <div class="card-bottom">
-                    <h3>Deadpool</h3>
-                    <p>Marvel Comics</p>
-                </div>
-            </div>
-
-            <div class="character-card">
-                <div class="card-top">
-                    <img src="https://segredosdomundo.r7.com/wp-content/uploads/2020/07/superman-historia-poderes-fraquezas-e-curiosidades.jpg" alt="Personagem">
-                </div>
-                <div class="card-bottom">
-                    <h3>Superman</h3>
-                    <p>DC Comics</p>
-                </div>
-            </div>
-
+        <div class="characters-grid" id="characters-grid">
+            <p class="texto-carregando">Carregando personagens...</p>
         </div>
     </section>
+
+    <script>
+        // Carrega os personagens da API
+        async function carregarPersonagens() {
+            const grid = document.getElementById('characters-grid');
+            
+            try {
+                const resposta = await fetch('http://localhost:3000/api/personagens');
+                const personagens = await resposta.json();
+
+                if (personagens.length === 0) {
+                    grid.innerHTML = '<p class="texto-carregando">Nenhum personagem cadastrado ainda.</p>';
+                    return;
+                }
+
+                grid.innerHTML = personagens.map(personagem => `
+                    <div class="character-card">
+                        <div class="card-top">
+                            ${personagem.imagem_url 
+                                ? `<img src="${personagem.imagem_url}" alt="${personagem.nome}">` 
+                                : '<div class="card-top-placeholder">🦸</div>'}
+                        </div>
+                        <div class="card-bottom">
+                            <h3>${personagem.nome}</h3>
+                            <p>${personagem.editora}</p>
+                            ${personagem.descricao ? `<p class="character-descricao">${personagem.descricao}</p>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (erro) {
+                console.error('Erro ao carregar personagens:', erro);
+                grid.innerHTML = '<p class="texto-erro">Erro ao carregar personagens. Verifique se o servidor está rodando.</p>';
+            }
+        }
+
+        // Função de busca de personagens
+        function buscarPersonagens() {
+            const termo = document.getElementById('input-busca').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.character-card');
+
+            if (!termo) {
+                cards.forEach(card => card.style.display = '');
+                return;
+            }
+
+            cards.forEach(card => {
+                const nome = card.querySelector('h3').textContent.toLowerCase();
+                const editora = card.querySelector('.card-bottom p').textContent.toLowerCase();
+                const descricao = card.querySelector('.character-descricao')?.textContent.toLowerCase() || '';
+
+                if (nome.includes(termo) || editora.includes(termo) || descricao.includes(termo)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Adiciona evento de busca ao pressionar Enter
+        document.getElementById('input-busca').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                buscarPersonagens();
+            }
+        });
+
+        // Carrega os personagens ao abrir a página
+        carregarPersonagens();
+    </script>
 
 </body>
 </html>

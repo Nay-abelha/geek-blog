@@ -21,13 +21,13 @@
     </header>
 
     <main class="login-container">
-        <form class="login-card">
+        <form class="login-card" id="form-login">
             <h2>Área do Admin 🔑</h2>
             <p>Faça login para gerenciar e postar no blog</p>
 
             <div class="input-group">
-                <label for="email">E-mail ou Usuário</label>
-                <input type="text" id="email" placeholder="seuemail@geek.com" required>
+                <label for="email">E-mail</label>
+                <input type="email" id="email" placeholder="seuemail@geek.com" required>
             </div>
 
             <div class="input-group">
@@ -35,12 +35,61 @@
                 <input type="password" id="password" placeholder="••••••••" required>
             </div>
 
+            <div id="mensagem-erro" class="mensagem-erro"></div>
+            <div id="mensagem-sucesso" class="mensagem-sucesso"></div>
+
             <button type="submit" class="btn-login">Entrar no Painel</button>
 
             <p>Não tem uma conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
 
         </form>
     </main>
+
+    <script>
+        document.getElementById('form-login').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('password').value;
+
+            const mensagemErro = document.getElementById('mensagem-erro');
+            const mensagemSucesso = document.getElementById('mensagem-sucesso');
+            mensagemErro.style.display = 'none';
+            mensagemSucesso.style.display = 'none';
+
+            try {
+                const resposta = await fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                const dados = await resposta.json();
+
+                if (resposta.ok) {
+                    // Salva o token e dados do usuário no localStorage
+                    localStorage.setItem('token', dados.token);
+                    localStorage.setItem('usuario', JSON.stringify(dados.usuario));
+
+                    mensagemSucesso.textContent = '✅ Login realizado! Redirecionando...';
+                    mensagemSucesso.style.display = 'block';
+
+                    setTimeout(() => {
+                        window.location.href = 'adm.html';
+                    }, 1500);
+                } else {
+                    mensagemErro.textContent = dados.mensagem || 'Erro ao fazer login.';
+                    mensagemErro.style.display = 'block';
+                }
+            } catch (erro) {
+                console.error('Erro:', erro);
+                mensagemErro.textContent = 'Erro de conexão com o servidor. Verifique se o backend está rodando.';
+                mensagemErro.style.display = 'block';
+            }
+        });
+    </script>
 
 </body>
 </html>

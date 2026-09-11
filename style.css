@@ -1,175 +1,173 @@
+/* =========================================
+   RESET BÁSICO DE CSS
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
- /* Reset básico de CSS */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #121212; /* Fundo escuro padrão geek */
-            color: #e0e0e0; /* Texto claro */
-            padding: 20px;
-        }
-
-        /* =========================================
-           1. NAVBAR (AZUL ESCURO)
-           ========================================= */
-        .navbar {
-            background-color: #1e1e2f;
-            border: 2px solid #2962ff; /* Borda azul do seu desenho */
-            border-radius: 8px;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .navbar .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2962ff;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .navbar nav ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-        }
-
-        .navbar nav ul li a {
-            color: #e0e0e0;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .navbar nav ul li a:hover {
-            color: #2962ff;
-        }
-
-        /* =========================================
-           2. BARRA DE PESQUISA (LARANJA)
-           ========================================= */
-        .search-container {
-            display: flex;
-            justify-content: center; /* Centraliza a barra */
-            margin-bottom: 30px;
-        }
-
-        .search-box {
-            display: flex;
-            width: 100%;
-            max-width: 600px; /* Fiz menor como você pediu */
-            border: 2px solid #ff9800; /* Borda laranja do seu desenho */
-            border-radius: 30px;
-            overflow: hidden;
-            background-color: #1e1e2f;
-        }
-
-        .search-box input {
-            flex-grow: 1;
-            padding: 12px 20px;
-            border: none;
-            background: transparent;
-            color: #fff;
-            font-size: 16px;
-            outline: none;
-        }
-
-        .search-box button {
-            background-color: #ff9800;
-            border: none;
-            padding: 0 20px;
-            cursor: pointer;
-            font-size: 18px;
-            color: #121212;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .search-box button:hover {
-            background-color: #e68a00;
-        }
+body {
+    background-color: #121212; /* Fundo escuro padrão geek */
+    color: #e0e0e0; /* Texto claro */
+    padding: 20px;
+}
 
 /* =========================================
-   3. DESTAQUE DA SEMANA (AZUL CLARO)
-========================================= */
-        .weekly-highlight {
-            display: flex;
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-            align-items: flex-start;
-        }
+   1. NAVBAR (AZUL ESCURO) - TODAS AS PÁGINAS
+   ========================================= */
+.navbar {
+    background-color: #1e1e2f;
+    border: 2px solid #2962ff; /* Borda azul do seu desenho */
+    border-radius: 8px;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
 
-        .highlight-image {
-            flex: 1; /* Ocupa metade do espaço */
-            border: 2px solid #00bcd4; /* Borda azul claro do seu desenho */
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 0 15px rgba(0, 188, 212, 0.2);
-        }
+.navbar .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2962ff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
 
-        .highlight-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-            object-fit: cover;
-            aspect-ratio: 16/9; /* Mantém proporção retangular */
-        }
+.navbar nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
 
-        .highlight-text {
-            flex: 1; /* Ocupa a outra metade do espaço */
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+.navbar nav ul li a {
+    color: #e0e0e0;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
 
-        .highlight-text h1 {
-            color: #00bcd4;
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
+.navbar nav ul li a:hover {
+    color: #2962ff;
+}
 
-        .highlight-text p {
-            line-height: 1.6;
-            color: #b0b0b0;
-            font-size: 16px;
-            text-align: justify;
-        }
+/* =========================================
+   2. BARRA DE PESQUISA (LARANJA) - INDEX, HQS, PERSONAGENS, SOBRE
+   ========================================= */
+.search-container {
+    display: flex;
+    justify-content: center; /* Centraliza a barra */
+    margin-bottom: 30px;
+}
 
-        /* Responsividade (Para telas menores/celulares) */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .navbar nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .weekly-highlight {
-                flex-direction: column; /* Coloca a imagem em cima do texto no celular */
-            }
-        }
+.search-box {
+    display: flex;
+    width: 100%;
+    max-width: 600px; /* Fiz menor como você pediu */
+    border: 2px solid #ff9800; /* Borda laranja do seu desenho */
+    border-radius: 30px;
+    overflow: hidden;
+    background-color: #1e1e2f;
+}
 
+.search-box input {
+    flex-grow: 1;
+    padding: 12px 20px;
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+}
 
-        /* Espaçamento entre os blocos da página */
-        .weekly-highlight, .trailer-section {
-            margin-bottom: 50px;
-        }
+.search-box button {
+    background-color: #ff9800;
+    border: none;
+    padding: 0 20px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #121212;
+    font-weight: bold;
+    transition: background 0.3s;
+}
 
-        /* Classe para inverter os lados (Texto na esquerda, Vídeo na direita) */
-        .row-reverse {
-            flex-direction: row-reverse;
-        }
+.search-box button:hover {
+    background-color: #e68a00;
+}
 
-/* --- ESTILOS BASE/DESKTOP --- */
+/* =========================================
+   3. DESTAQUE DA SEMANA (AZUL CLARO) - INDEX
+   ========================================= */
+.weekly-highlight {
+    display: flex;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: flex-start;
+}
+
+.highlight-image {
+    flex: 1; /* Ocupa metade do espaço */
+    border: 2px solid #00bcd4; /* Borda azul claro do seu desenho */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 188, 212, 0.2);
+}
+
+.highlight-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 16/9; /* Mantém proporção retangular */
+}
+
+.highlight-text {
+    flex: 1; /* Ocupa a outra metade do espaço */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.highlight-text h1 {
+    color: #00bcd4;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.highlight-text p {
+    line-height: 1.6;
+    color: #b0b0b0;
+    font-size: 16px;
+    text-align: justify;
+}
+
+/* Responsividade (Para telas menores/celulares) */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .navbar nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .weekly-highlight {
+        flex-direction: column; /* Coloca a imagem em cima do texto no celular */
+    }
+}
+
+/* Espaçamento entre os blocos da página */
+.weekly-highlight, .trailer-section {
+    margin-bottom: 50px;
+}
+
+/* Classe para inverter os lados (Texto na esquerda, Vídeo na direita) */
+.row-reverse {
+    flex-direction: row-reverse;
+}
 
 /* Garante que imagens e iFrames fiquem contidos no tamanho da tela */
 img, iframe {
@@ -189,133 +187,99 @@ img, iframe {
     min-height: 250px; /* Garante uma altura visível */
 }
 
-/* Layout Flexbox padronizado */
-.weekly-highlight {
+/* =========================================
+   4. SEÇÃO DE PERSONAGENS (GRADE 3x2) - PERSONAGENS.HTML
+   ========================================= */
+.characters-section {
+    max-width: 1200px;
+    margin: 60px auto 30px auto;
+}
+
+.characters-section h2 {
+    color: #2962ff; /* Cor azul da sua navbar */
+    font-size: 26px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #2962ff;
+    padding-bottom: 10px;
+}
+
+/* Montando o Grid de 3 colunas */
+.characters-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colunas de tamanhos iguais */
+    gap: 30px; /* Espaço entre os cards */
+}
+
+/* Estrutura do Card de Personagem */
+.character-card {
     display: flex;
-    gap: 20px;
+    flex-direction: column;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Bloco Superior (Vermelho no seu desenho) */
+.card-top {
+    background-color: #1e1e2f;
+    border: 3px solid #ff1744; /* Borda vermelha */
+    border-bottom: none; /* Tira a borda de baixo para emendar com o azul */
+    height: 220px; /* Altura para a foto ou destaque */
+    display: flex;
     align-items: center;
-    padding: 20px;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
 }
 
-/* Inverte a ordem do segundo bloco no desktop se desejar */
-.row-reverse {
-    flex-direction: row-reverse;
+.card-top img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
-/* --- RESPONSIVIDADE (Telas de até 768px - Celulares e Tablets) --- */
-@media (max-width: 768px) {
-    /* Muda a direção de lado a lado (row) para pilha (column) */
-    .weekly-highlight, 
-    .weekly-highlight.row-reverse {
-        flex-direction: column;
-        padding: 10px;
-    }
+/* Efeito de zoom na imagem quando passa o mouse */
+.character-card:hover .card-top img {
+    transform: scale(1.08);
+}
 
-    /* O texto ocupa 100% da largura no mobile */
-    .highlight-text {
-        width: 100%;
-    }
+/* Bloco Inferior (Azul no seu desenho) */
+.card-bottom {
+    background-color: #161624;
+    border: 3px solid #00bcd4; /* Borda azul claro */
+    padding: 15px;
+    text-align: center;
+}
 
-    /* O elemento do vídeo/imagem ocupa toda a largura */
-    .weekly-highlight > div {
-        width: 100% !important;
+.card-bottom h3 {
+    color: #fff;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.card-bottom p {
+    color: #b0b0b0;
+    font-size: 14px;
+}
+
+/* Responsividade: Transforma em 1 coluna no celular e 2 no tablet */
+@media (max-width: 900px) {
+    .characters-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
+@media (max-width: 600px) {
+    .characters-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
 /* =========================================
-    4. SEÇÃO DE PERSONAGENS (GRADE 3x2)
-/* ========================================= */
-           .characters-section {
-            max-width: 1200px;
-            margin: 60px auto 30px auto;
-        }
-
-        .characters-section h2 {
-            color: #2962ff; /* Cor azul da sua navbar */
-            font-size: 26px;
-            margin-bottom: 25px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 2px solid #2962ff;
-            padding-bottom: 10px;
-        }
-
-        /* Montando o Grid de 3 colunas */
-        .characters-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 colunas de tamanhos iguais */
-            gap: 30px; /* Espaço entre os cards */
-        }
-
-        /* Estrutura do Card de Personagem */
-        .character-card {
-            display: flex;
-            flex-direction: column;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        /* Bloco Superior (Vermelho no seu desenho) */
-        .card-top {
-            background-color: #1e1e2f;
-            border: 3px solid #ff1744; /* Borda vermelha */
-            border-bottom: none; /* Tira a borda de baixo para emendar com o azul */
-            height: 220px; /* Altura para a foto ou destaque */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .card-top img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        /* Efeito de zoom na imagem quando passa o mouse */
-        .character-card:hover .card-top img {
-            transform: scale(1.08);
-        }
-
-        /* Bloco Inferior (Azul no seu desenho) */
-        .card-bottom {
-            background-color: #161624;
-            border: 3px solid #00bcd4; /* Borda azul claro */
-            padding: 15px;
-            text-align: center;
-        }
-
-        .card-bottom h3 {
-            color: #fff;
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-
-        .card-bottom p {
-            color: #b0b0b0;
-            font-size: 14px;
-        }
-
-        /* Responsividade: Transforma em 1 coluna no celular e 2 no tablet */
-        @media (max-width: 900px) {
-            .characters-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .characters-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-
-        /* --- TELA DE LOGIN --- */
-
+   5. PÁGINA DE LOGIN - LOGIN.HTML
+   ========================================= */
 .login-container {
     display: flex;
     justify-content: center;
@@ -405,14 +369,9 @@ img, iframe {
     }
 }
 
-
-/*pagina de cadastro*/
-
-
 /* =========================================
-   5. PÁGINA DE CADASTRO
-========================================= */
-
+   6. PÁGINA DE CADASTRO - CADASTRO.HTML
+   ========================================= */
 .register-container {
     display: flex;
     justify-content: center;
@@ -492,6 +451,53 @@ img, iframe {
     text-decoration: underline;
 }
 
+/* Estilos específicos do formulário de cadastro */
+.register-card .consentimento-group {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.register-card .consentimento-group input[type="checkbox"] {
+    width: auto;
+    margin-top: 3px;
+}
+
+.register-card .consentimento-group label {
+    font-size: 0.85rem;
+    color: #aaa;
+    line-height: 1.4;
+}
+
+.register-card .consentimento-group a {
+    color: #00d2ff;
+}
+
+.register-card .title-container .emoji {
+    font-size: 1.5rem;
+}
+
+/* Mensagens de erro/sucesso - CADASTRO.HTML e LOGIN.HTML */
+.mensagem-erro {
+    display: none;
+    background-color: #b71c1c;
+    color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.mensagem-sucesso {
+    display: none;
+    background-color: #1b5e20;
+    color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
 @media (max-width: 480px) {
     .register-card {
         padding: 20px;
@@ -503,12 +509,651 @@ img, iframe {
     }
 }
 
-
-/* grade da pagina sobre*/
-
-   /* Montando o Grid de 2 colunas */
-    .characters-grid2 {
+/* =========================================
+   7. PÁGINA SOBRE - SOBRE.HTML
+   ========================================= */
+/* grade da pagina sobre */
+/* Montando o Grid de 2 colunas */
+.characters-grid2 {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 3 colunas de tamanhos iguais */
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas de tamanhos iguais */
     gap: 30px; /* Espaço entre os cards */
+}
+
+/* =========================================
+   8. PÁGINA DE PRIVACIDADE - PRIVACIDADE.HTML
+   ========================================= */
+.privacy-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    color: #e0e0e0;
+    line-height: 1.8;
+}
+
+.privacy-container h1 {
+    color: #00d2ff;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #00d2ff;
+    padding-bottom: 10px;
+}
+
+.privacy-container h2 {
+    color: #00d2ff;
+    font-size: 1.4rem;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.privacy-container p {
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+.privacy-container ul {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+.privacy-container li {
+    margin-bottom: 8px;
+}
+
+.privacy-container .data-atualizacao {
+    color: #888;
+    font-style: italic;
+    margin-top: 30px;
+    border-top: 1px solid #333;
+    padding-top: 15px;
+}
+
+.privacy-container .destaque {
+    background-color: #2b2b2b;
+    border-left: 4px solid #00d2ff;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+}
+
+/* Link de destaque dentro da página de privacidade */
+.privacy-container a {
+    color: #00d2ff;
+}
+
+/* =========================================
+   9. PÁGINA DE DIREITOS - DIREITOS.HTML
+   ========================================= */
+.direitos-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    color: #e0e0e0;
+    line-height: 1.8;
+}
+
+.direitos-container h1 {
+    color: #00d2ff;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #00d2ff;
+    padding-bottom: 10px;
+}
+
+.direitos-container h2 {
+    color: #00d2ff;
+    font-size: 1.4rem;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.direitos-container p {
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+.direitos-container ul {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+.direitos-container li {
+    margin-bottom: 8px;
+}
+
+.direitos-container .form-group {
+    margin-bottom: 20px;
+}
+
+.direitos-container label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ddd;
+    font-weight: bold;
+}
+
+.direitos-container input,
+.direitos-container select,
+.direitos-container textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background-color: #2b2b2b;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.direitos-container input:focus,
+.direitos-container select:focus,
+.direitos-container textarea:focus {
+    border-color: #00d2ff;
+}
+
+.direitos-container textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.btn-direitos {
+    background-color: #00d2ff;
+    color: #000;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-direitos:hover {
+    background-color: #0099cc;
+}
+
+.direitos-container .destaque {
+    background-color: #2b2b2b;
+    border-left: 4px solid #00d2ff;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+}
+
+/* Mensagem de sucesso da página de direitos */
+.direitos-container .mensagem-sucesso {
+    display: none;
+    background-color: #1b5e20;
+    color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Link de destaque dentro da página de direitos */
+.direitos-container a {
+    color: #00d2ff;
+}
+
+/* =========================================
+   10. PÁGINA ADMIN - ADM.HTML
+   ========================================= */
+.admin-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    color: #e0e0e0;
+}
+
+.admin-container h1 {
+    color: #00d2ff;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #00d2ff;
+    padding-bottom: 10px;
+}
+
+.admin-container h2 {
+    color: #00d2ff;
+    font-size: 1.4rem;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.admin-container .form-group {
+    margin-bottom: 20px;
+}
+
+.admin-container label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ddd;
+    font-weight: bold;
+}
+
+.admin-container input,
+.admin-container select,
+.admin-container textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background-color: #2b2b2b;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.admin-container input:focus,
+.admin-container select:focus,
+.admin-container textarea:focus {
+    border-color: #00d2ff;
+}
+
+.admin-container textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.btn-admin {
+    background-color: #00d2ff;
+    color: #000;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-admin:hover {
+    background-color: #0099cc;
+}
+
+.btn-logout {
+    background-color: #b71c1c;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-left: 10px;
+}
+
+.btn-logout:hover {
+    background-color: #8b1414;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.admin-user {
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.mensagem {
+    display: none;
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 15px;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.mensagem.erro {
+    background-color: #b71c1c;
+    color: #fff;
+}
+
+.mensagem.sucesso {
+    background-color: #1b5e20;
+    color: #fff;
+}
+
+.login-required {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.login-required h2 {
+    color: #00d2ff;
+    margin-bottom: 20px;
+}
+
+.login-required a {
+    color: #00d2ff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-required-links {
+    margin-top: 20px;
+}
+
+/* Estilos para os posts do admin (gerados via JS) */
+.admin-post-card {
+    background-color: #2b2b2b;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border-left: 4px solid #00d2ff;
+}
+
+.admin-post-card h3 {
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.admin-post-card p {
+    color: #aaa;
+    font-size: 0.85rem;
+}
+
+.admin-post-card .texto-carregando {
+    color: #aaa;
+}
+
+.admin-post-card .texto-erro {
+    color: #b71c1c;
+}
+
+/* =========================================
+   11. ESTILOS DO PAINEL ADMIN - ABAS E CRUD
+   ========================================= */
+.admin-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+}
+
+.admin-tab {
+    background-color: #2b2b2b;
+    color: #aaa;
+    border: 1px solid #333;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.admin-tab:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+.admin-tab.active {
+    background-color: #00d2ff;
+    color: #000;
+    border-color: #00d2ff;
+}
+
+.admin-tab-content {
+    display: none;
+}
+
+.admin-tab-content.active {
+    display: block;
+}
+
+/* Botões de editar e excluir */
+.admin-post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.admin-post-acoes {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.btn-editar {
+    background-color: #2962ff;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-editar:hover {
+    background-color: #1e4fd6;
+}
+
+.btn-excluir {
+    background-color: #b71c1c;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-excluir:hover {
+    background-color: #8b1414;
+}
+
+.btn-cancelar {
+    background-color: #666;
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-left: 10px;
+}
+
+.btn-cancelar:hover {
+    background-color: #444;
+}
+
+/* Resumo do post no card */
+.admin-post-resumo {
+    color: #888 !important;
+    font-size: 0.8rem !important;
+    margin-top: 8px;
+    line-height: 1.4;
+}
+
+/* Cards de personagens no admin */
+.admin-personagem-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.admin-personagem-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.admin-personagem-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid #00d2ff;
+    flex-shrink: 0;
+}
+
+.admin-personagem-img-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1e1e2f;
+    font-size: 1.8rem;
+}
+
+.admin-personagem-detalhes {
+    flex: 1;
+}
+
+.admin-personagem-detalhes h3 {
+    color: #fff;
+    margin-bottom: 3px;
+}
+
+.admin-personagem-detalhes p {
+    color: #aaa;
+    font-size: 0.85rem;
+}
+
+/* =========================================
+   12. PÁGINA DE PERSONAGENS - MELHORIAS
+   ========================================= */
+.card-top-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    background-color: #1e1e2f;
+}
+
+.character-descricao {
+    color: #888 !important;
+    font-size: 0.8rem !important;
+    margin-top: 8px;
+    line-height: 1.4;
+    text-align: justify;
+}
+
+.texto-carregando {
+    color: #aaa;
+    text-align: center;
+    padding: 30px;
+    grid-column: 1 / -1;
+}
+
+.texto-erro {
+    color: #b71c1c;
+    text-align: center;
+    padding: 30px;
+    grid-column: 1 / -1;
+}
+
+/* =========================================
+   13. PÁGINA INDEX - INDEX.HTML
+   ========================================= */
+/* Banner de Cookies (LGPD) */
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #1e1e2f;
+    border-top: 2px solid #2962ff;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.cookie-banner p {
+    color: #e0e0e0;
+    font-size: 0.9rem;
+    margin: 0;
+    flex: 1;
+    padding-right: 20px;
+}
+
+.cookie-banner a {
+    color: #00d2ff;
+    text-decoration: underline;
+}
+
+.cookie-banner button {
+    background-color: #00d2ff;
+    color: #000;
+    border: none;
+    padding: 10px 25px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.cookie-banner button:hover {
+    background-color: #0099cc;
+}
+
+/* Rodapé - INDEX.HTML */
+.footer {
+    background-color: #1e1e2f;
+    border-top: 2px solid #2962ff;
+    padding: 20px 30px;
+    margin-top: 50px;
+    text-align: center;
+}
+
+.footer p {
+    color: #aaa;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+}
+
+.footer a {
+    color: #00d2ff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .cookie-banner {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    .cookie-banner p {
+        padding-right: 0;
+    }
 }

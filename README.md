@@ -1,26 +1,24 @@
-# geek-blog
+# Análise de Código e Conformidade LGPD
 
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Geek</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+## Resumo da Revisão
 
-    <header class="navbar">
-        <div class="logo">GeekBlog</div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li> |
-                <li><a href="Personagens.html">Personagens</a></li> |
-                <li><a href="hqs.html">Promoções de HQs</a></li> |
-                <li><a href="sobre.html">Sobre</a></li>
-            </ul>
-        </nav>
-    </header>
+Este documento contém a análise do projeto geek-blog.
 
-</body>
-</html>
+## Arquivos Analisados
+
+- index.html
+- login.html
+- cadastro.html
+- sobre.html
+- adm.html
+- hqs.html
+- Personagens.html
+- style.css
+- backend/server.js
+- backend/db.js
+- backend/chat.js
+- Mysql/UML-BD.txt
+
+## Resultado
+
+Análise em andamento...

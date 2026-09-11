@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direitos do Titular - GeekBlog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">GeekBlog</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li> |
+                <li><a href="Personagens.html">Personagens</a></li> |
+                <li><a href="hqs.html">Promoções de HQs</a></li> |
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="direitos-container">
+        <h1>📋 Direitos do Titular de Dados</h1>
+
+        <p>
+            Em conformidade com o <strong>Art. 18 da Lei Geral de Proteção de Dados Pessoais (LGPD - Lei nº 13.709/2018)</strong>, você, como titular de dados pessoais, tem os seguintes direitos garantidos:
+        </p>
+
+        <h2>Seus Direitos (Art. 18 da LGPD)</h2>
+        <ul>
+            <li><strong>Confirmação e Acesso (Art. 18, I e II):</strong> Confirmar se tratamos seus dados e acessá-los de forma clara e completa.</li>
+            <li><strong>Correção (Art. 18, III):</strong> Corrigir dados incompletos, inexatos ou desatualizados.</li>
+            <li><strong>Anonimização, Bloqueio ou Eliminação (Art. 18, IV):</strong> Solicitar anonimização, bloqueio ou eliminação de dados desnecessários, excessivos ou tratados em desconformidade com a lei.</li>
+            <li><strong>Portabilidade (Art. 18, V):</strong> Solicitar a portabilidade dos seus dados a outro fornecedor de serviço ou produto.</li>
+            <li><strong>Eliminação (Art. 18, VI):</strong> Solicitar a eliminação dos dados pessoais tratados com o seu consentimento.</li>
+            <li><strong>Informação sobre Compartilhamento (Art. 18, VII):</strong> Ser informado sobre as entidades públicas e privadas com as quais compartilhamos seus dados.</li>
+            <li><strong>Informação sobre a Possibilidade de Não Consentir (Art. 18, VIII):</strong> Ser informado sobre a possibilidade de não fornecer consentimento e sobre as consequências da negativa.</li>
+            <li><strong>Revogação do Consentimento (Art. 18, IX):</strong> Revogar o consentimento a qualquer momento, por manifestação expressa.</li>
+        </ul>
+
+        <div class="destaque">
+            <strong>Prazo de resposta:</strong> Atenderemos suas solicitações em até <strong>15 dias</strong>, conforme previsto no Art. 19 da LGPD.
+        </div>
+
+        <h2>Formulário de Solicitação</h2>
+        <p>Preencha o formulário abaixo para exercer seus direitos. Nossa equipe entrará em contato para confirmar sua identidade e processar sua solicitação.</p>
+
+        <form id="form-direitos">
+            <div class="form-group">
+                <label for="nome">Nome Completo *</label>
+                <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail *</label>
+                <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="direito">Direito que deseja exercer *</label>
+                <select id="direito" name="direito" required>
+                    <option value="">Selecione uma opção</option>
+                    <option value="acesso">Acesso aos meus dados (Art. 18, I e II)</option>
+                    <option value="correcao">Correção de dados (Art. 18, III)</option>
+                    <option value="anonimizacao">Anonimização, bloqueio ou eliminação (Art. 18, IV)</option>
+                    <option value="portabilidade">Portabilidade (Art. 18, V)</option>
+                    <option value="eliminacao">Eliminação de dados (Art. 18, VI)</option>
+                    <option value="informacao">Informação sobre compartilhamento (Art. 18, VII)</option>
+                    <option value="revogacao">Revogação do consentimento (Art. 18, IX)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="mensagem">Descrição da solicitação *</label>
+                <textarea id="mensagem" name="mensagem" placeholder="Descreva detalhadamente sua solicitação..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn-direitos">Enviar Solicitação</button>
+        </form>
+
+        <div id="mensagem-sucesso" class="mensagem-sucesso">
+            ✅ Solicitação enviada com sucesso! Nossa equipe entrará em contato em até 15 dias.
+        </div>
+
+        <h2>Contato com o Encarregado de Dados (DPO)</h2>
+        <p>
+            Para dúvidas ou solicitações, você também pode entrar em contato diretamente com nosso Encarregado de Dados:
+        </p>
+        <ul>
+            <li><strong>Encarregado de Dados (DPO):</strong> Nayara Isabelle da Silva</li>
+            <li><strong>E-mail:</strong> contato@geekblog.com.br</li>
+            <li><strong>Endereço:</strong> São Paulo, SP - Brasil</li>
+        </ul>
+
+        <p>
+            Consulte também nossa <a href="privacidade.html">Política de Privacidade</a> para mais informações sobre como tratamos seus dados.
+        </p>
+    </main>
+
+    <script>
+        document.getElementById('form-direitos').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Simula o envio da solicitação
+            // Em produção, enviaria para o backend via fetch POST /api/direitos
+            const mensagemSucesso = document.getElementById('mensagem-sucesso');
+            mensagemSucesso.style.display = 'block';
+
+            // Limpa o formulário
+            this.reset();
+
+            // Esconde a mensagem após 5 segundos
+            setTimeout(() => {
+                mensagemSucesso.style.display = 'none';
+            }, 5000);
+        });
+    </script>
+
+</body>
+</html>
