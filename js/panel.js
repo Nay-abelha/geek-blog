@@ -803,7 +803,7 @@
             return;
         }
 
-        // 2) ¿El rol del usuario tiene permitido estar en esta página?
+        // 2) O papel do usuário tem permissão para estar nesta página?
         if (!contiene(ROLES_PERMITIDOS, usuario.role)) {
             renderAccesoDenegado(container, usuario);
             return;
