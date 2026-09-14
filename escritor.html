@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Admin - GeekBlog</title>
+    <title>Painel do Escritor - GeekBlog</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -21,15 +21,15 @@
     </header>
 
     <main class="admin-container" id="panel-container">
-        <!-- O conteúdo é renderizado via js/panel.js de acordo com o papel-->
+        <!-- O conteúdo é renderizado via js/panel.js de acordo com o papel -->
     </main>
 
     <script>
-        // Configuração da página para ADMINISTRADORES (papel: admin)
+        // Configuração da página para ESCRITORES (papel: autor)
         window.PANEL_CONFIG = {
-            roles: ['admin'],
-            titulo: '🛡️ Painel Administrativo',
-            descricao: 'Controle total: posts, personagens, estatísticas do site e usuários.'
+            roles: ['autor'],
+            titulo: '📝 Painel do Escritor',
+            descricao: 'Escreva novas publicações e edite ou exclua apenas as suas.'
         };
     </script>
     <script src="js/panel.js"></script>

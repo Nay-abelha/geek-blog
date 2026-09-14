@@ -15,8 +15,8 @@
                 <li><a href="index.html">Home</a></li> |
                 <li><a href="Personagens.html">Personagens</a></li> |
                 <li><a href="hqs.html">Promoções de HQs</a></li> |
-                <li><a href="sobre.html">Sobre</a></li>
-                <li><a href="login.html">Login</a></li>
+                <li><a href="sobre.html">Sobre</a></li> |
+                <li><a href="login.html" id="enlace-login">Login</a></li>
             </ul>
         </nav>
     </header>
@@ -85,6 +85,26 @@
     </footer>
 
     <script>
+        // =========================================
+        // LINK "MEU PAINEL" SEGUNDO ROL (se houver sessão)
+        // =========================================
+        (function() {
+            const enlace = document.getElementById('enlace-login');
+            if (!enlace) return;
+            try {
+                const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
+                if (usuario && localStorage.getItem('token')) {
+                    const paginaPorRol = {
+                        admin: 'adm.html',
+                        editor: 'editor.html',
+                        autor: 'escritor.html'
+                    };
+                    enlace.href = paginaPorRol[usuario.role] || 'adm.html';
+                    enlace.textContent = 'Meu Painel';
+                }
+            } catch (e) { /* sem sessão: se mantiene o enlace de Login */ }
+        })();
+
         // =========================================
         // BANNER DE COOKIES (LGPD)
         // =========================================

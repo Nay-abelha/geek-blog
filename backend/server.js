@@ -77,6 +77,37 @@ function validarCampos(campos) {
     };
 }
 
+// Middleware de verificação de papéis
+// Uso: app.rota('/', autenticarToken, verificarPapel('admin'), handler)
+const PAPEIS_VALIDOS = ['admin', 'editor', 'autor'];
+const ROLES_VALIDOS = PAPEIS_VALIDOS;
+function verificarPapel(...papeisPermitidos) {
+    return (req, res, next) => {
+        if (!req.user) {
+            return res.status(401).json({ mensagem: 'Não autenticado. Faça login.' });
+        }
+        if (!papeisPermitidos.includes(req.user.role)) {
+            return res.status(403).json({
+                mensagem: `Acesso negado. Seu papel é "${req.user.role}" e esta ação requer: ${papeisPermitidos.join(', ')}.`
+            });
+        }
+        next();
+    };
+}
+
+// Alias de compatibilidade (nome antigo em espanhol)
+const verificarRole = verificarPapel;
+
+// Verifica se o usuário pode editar/excluir um post específico:
+// - o próprio autor sempre pode
+// - editores e admins podem editar/excluir qualquer post
+function podeGerenciarPost(post, user) {
+    return post.autor_id === user.id || user.role === 'editor' || user.role === 'admin';
+}
+
+// Alias de compatibilidade (nome antigo em espanhol)
+const podeGestionarPost = podeGerenciarPost;
+
 // =========================================
 // ROTAS DE POSTAGENS
 // =========================================
@@ -97,6 +128,62 @@ app.get('/api/posts', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ mensagem: 'Erro ao buscar posts' });
+    }
+});
+
+// ROTA 1b: Posts para o painel (protegida): autor -> só seus posts; editor/admin -> todos
+app.get('/api/posts/painel', autenticarToken, async (req, res) => {
+    try {
+        let sql = `
+            SELECT p.id, p.titulo, p.slug, p.conteudo, p.imagem_capa_url, p.status,
+                   p.criado_em, p.atualizado_em,
+                   u.nome AS autor, c.nome AS categoria, p.autor_id, p.categoria_id
+            FROM posts p
+            LEFT JOIN usuarios u ON p.autor_id = u.id
+            LEFT JOIN categorias c ON p.categoria_id = c.id
+        `;
+        const params = [];
+
+        // Escritores (autores) só veem seus próprios posts
+        if (req.user.role === 'autor') {
+            sql += ' WHERE p.autor_id = ?';
+            params.push(req.user.id);
+        }
+
+        sql += ' ORDER BY p.criado_em DESC';
+
+        const [posts] = await db.query(sql, params);
+        res.json(posts);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ mensagem: 'Erro ao buscar posts do painel' });
+    }
+});
+
+// ROTA 1c: Post individual para edição no painel (protegida), incluye rascunhos
+app.get('/api/posts/:id/painel', autenticarToken, async (req, res) => {
+    try {
+        const [posts] = await db.query(`
+            SELECT p.*, u.nome AS autor, c.nome AS categoria
+            FROM posts p
+            LEFT JOIN usuarios u ON p.autor_id = u.id
+            LEFT JOIN categorias c ON p.categoria_id = c.id
+            WHERE p.id = ?
+        `, [req.params.id]);
+
+        if (posts.length === 0) {
+            return res.status(404).json({ mensagem: 'Post não encontrado.' });
+        }
+
+        const post = posts[0];
+        if (!podeGestionarPost(post, req.user)) {
+            return res.status(403).json({ mensagem: 'Você não tem permissão para editar este post.' });
+        }
+
+        res.json(post);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ mensagem: 'Erro ao buscar post' });
     }
 });
 
@@ -125,14 +212,17 @@ app.get('/api/posts/:id', async (req, res) => {
 
 // ROTA 3: Criar uma nova postagem (Protegida por autenticação)
 app.post('/api/posts', autenticarToken, validarCampos(['titulo', 'slug', 'conteudo']), async (req, res) => {
-    const { titulo, slug, conteudo, imagem_capa_url, categoria_id } = req.body;
+    const { titulo, slug, conteudo, imagem_capa_url, categoria_id, status } = req.body;
     const autor_id = req.user.id;
+
+    // Validar status: Escritores/editores/admin podem publicar ou salvar rascunho
+    const statusFinal = ['publicado', 'rascunho'].includes(status) ? status : 'publicado';
 
     try {
         const [result] = await db.query(
             `INSERT INTO posts (titulo, slug, conteudo, imagem_capa_url, autor_id, categoria_id, status) 
-             VALUES (?, ?, ?, ?, ?, ?, 'publicado')`,
-            [titulo, slug, conteudo, imagem_capa_url || null, autor_id, categoria_id || null]
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [titulo, slug, conteudo, imagem_capa_url || null, autor_id, categoria_id || null, statusFinal]
         );
         res.status(201).json({ mensagem: 'Post criado com sucesso!', id: result.insertId });
     } catch (error) {
@@ -143,7 +233,7 @@ app.post('/api/posts', autenticarToken, validarCampos(['titulo', 'slug', 'conteu
 
 // ROTA 4: Atualizar postagem (Protegida por autenticação)
 app.put('/api/posts/:id', autenticarToken, async (req, res) => {
-    const { titulo, slug, conteudo, imagem_capa_url, categoria_id } = req.body;
+    const { titulo, slug, conteudo, imagem_capa_url, categoria_id, status } = req.body;
     const postId = req.params.id;
 
     try {
@@ -153,19 +243,21 @@ app.put('/api/posts/:id', autenticarToken, async (req, res) => {
             return res.status(404).json({ mensagem: 'Post não encontrado.' });
         }
 
-        // Verifica se o usuário é o autor ou admin
+        // Verifica se o usuário pode editar (autor do post, editor ou admin)
         const post = posts[0];
-        if (post.autor_id !== req.user.id && req.user.role !== 'admin') {
+        if (!podeGestionarPost(post, req.user)) {
             return res.status(403).json({ mensagem: 'Você não tem permissão para editar este post.' });
         }
 
+        const statusFinal = ['publicado', 'rascunho'].includes(status) ? status : post.status;
+
         await db.query(
             `UPDATE posts 
-             SET titulo = ?, slug = ?, conteudo = ?, imagem_capa_url = ?, categoria_id = ?, atualizado_em = CURRENT_TIMESTAMP
+             SET titulo = ?, slug = ?, conteudo = ?, imagem_capa_url = ?, categoria_id = ?, status = ?, atualizado_em = CURRENT_TIMESTAMP
              WHERE id = ?`,
             [titulo || post.titulo, slug || post.slug, conteudo || post.conteudo, 
              imagem_capa_url !== undefined ? imagem_capa_url : post.imagem_capa_url, 
-             categoria_id !== undefined ? categoria_id : post.categoria_id, postId]
+             categoria_id !== undefined ? categoria_id : post.categoria_id, statusFinal, postId]
         );
 
         res.json({ mensagem: 'Post atualizado com sucesso!' });
@@ -186,9 +278,9 @@ app.delete('/api/posts/:id', autenticarToken, async (req, res) => {
             return res.status(404).json({ mensagem: 'Post não encontrado.' });
         }
 
-        // Verifica se o usuário é o autor ou admin
+        // Verifica se o usuário pode excluir (autor do post, editor ou admin)
         const post = posts[0];
-        if (post.autor_id !== req.user.id && req.user.role !== 'admin') {
+        if (!podeGestionarPost(post, req.user)) {
             return res.status(403).json({ mensagem: 'Você não tem permissão para excluir este post.' });
         }
 
@@ -285,8 +377,8 @@ app.put('/api/personagens/:id', autenticarToken, async (req, res) => {
     }
 });
 
-// ROTA 10: Excluir personagem (Protegida por autenticação)
-app.delete('/api/personagens/:id', autenticarToken, async (req, res) => {
+// ROTA 10: Excluir personagem (Só admin)
+app.delete('/api/personagens/:id', autenticarToken, verificarRole('admin'), async (req, res) => {
     const personagemId = req.params.id;
 
     try {
@@ -458,6 +550,125 @@ app.post('/api/chat', autenticarToken, validarCampos(['mensagem']), async (req, 
     } catch (error) {
         console.error('Erro no chat:', error);
         res.status(500).json({ mensagem: 'Erro ao processar mensagem no chat.' });
+    }
+});
+
+// =========================================
+// ROTAS DE GESTION DE USUÁRIOS (Só admin)
+// =========================================
+
+// ROTA 16: Listar todos os usuários (Só admin)
+app.get('/api/usuarios', autenticarToken, verificarRole('admin'), async (req, res) => {
+    try {
+        const [usuarios] = await db.query(
+            'SELECT id, nome, email, role, criado_em FROM usuarios ORDER BY criado_em DESC'
+        );
+        res.json(usuarios);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ mensagem: 'Erro ao listar usuários' });
+    }
+});
+
+// ROTA 17: Criar usuário com papel específico (Só admin)
+app.post('/api/usuarios', autenticarToken, verificarRole('admin'), validarCampos(['nome', 'email', 'senha', 'role']), async (req, res) => {
+    const { nome, email, senha, role } = req.body;
+
+    if (!ROLES_VALIDOS.includes(role)) {
+        return res.status(400).json({ mensagem: `Papel inválido. Use um de: ${ROLES_VALIDOS.join(', ')}.` });
+    }
+
+    try {
+        // Verifica se o email já existe
+        const [existe] = await db.query('SELECT id FROM usuarios WHERE email = ?', [email]);
+        if (existe.length > 0) {
+            return res.status(409).json({ mensagem: 'E-mail já cadastrado.' });
+        }
+
+        const senhaHash = await bcrypt.hash(senha, 10);
+
+        const [result] = await db.query(
+            'INSERT INTO usuarios (nome, email, senha_hash, role) VALUES (?, ?, ?, ?)',
+            [nome, email, senhaHash, role]
+        );
+
+        res.status(201).json({ mensagem: `Usuário ${role} criado com sucesso!`, id: result.insertId });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ mensagem: 'Erro ao criar usuário' });
+    }
+});
+
+// ROTA 18: Mudar papel de um usuário (Só admin)
+app.put('/api/usuarios/:id/role', autenticarToken, verificarRole('admin'), async (req, res) => {
+    const { role } = req.body;
+
+    if (!ROLES_VALIDOS.includes(role)) {
+        return res.status(400).json({ mensagem: `Papel inválido. Use um de: ${ROLES_VALIDOS.join(', ')}.` });
+    }
+
+    try {
+        // Não permitir que um admin mude seu próprio papel (evita ficar sem admins)
+        if (parseInt(req.params.id) === req.user.id) {
+            return res.status(400).json({ mensagem: 'Você não pode mudar seu próprio papel.' });
+        }
+
+        const [result] = await db.query('UPDATE usuarios SET role = ? WHERE id = ?', [role, req.params.id]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ mensagem: 'Usuário não encontrado.' });
+        }
+
+        res.json({ mensagem: 'Papel atualizado com sucesso!' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ mensagem: 'Erro ao atualizar papel' });
+    }
+});
+
+// =========================================
+// ROTA DE ESTATÍSTICAS DO SITE (Só admin)
+// =========================================
+
+// ROTA 19: Dashboard / funcionamento do site
+app.get('/api/stats', autenticarToken, verificarRole('admin'), async (req, res) => {
+    try {
+        const [[usuarios]] = await db.query(`
+            SELECT COUNT(*) AS total,
+                   SUM(role = 'admin')  AS admins,
+                   SUM(role = 'editor') AS editores,
+                   SUM(role = 'autor')  AS escritores
+            FROM usuarios
+        `);
+
+        const [[posts]] = await db.query(`
+            SELECT COUNT(*) AS total,
+                   SUM(status = 'publicado') AS publicados,
+                   SUM(status = 'rascunho')  AS rascunhos
+            FROM posts
+        `);
+
+        const [[personagens]] = await db.query('SELECT COUNT(*) AS total FROM personagens');
+        const [[categorias]] = await db.query('SELECT COUNT(*) AS total FROM categorias');
+
+        const [recientes] = await db.query(`
+            SELECT p.id, p.titulo, p.status, p.criado_em, u.nome AS autor
+            FROM posts p
+            LEFT JOIN usuarios u ON p.autor_id = u.id
+            ORDER BY p.criado_em DESC
+            LIMIT 6
+        `);
+
+        res.json({
+            usuarios,
+            posts,
+            personagens,
+            categorias,
+            recientes
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ mensagem: 'Erro ao carregar estatísticas' });
     }
 });
 

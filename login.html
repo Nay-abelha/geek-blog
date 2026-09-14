@@ -76,9 +76,17 @@
                     mensagemSucesso.textContent = '✅ Login realizado! Redirecionando...';
                     mensagemSucesso.style.display = 'block';
 
+                    // Redirige cada rol ao seu painel
+                    const paginaPorRol = {
+                        admin: 'adm.html',
+                        editor: 'editor.html',
+                        autor: 'escritor.html'
+                    };
+                    const paginaDestino = paginaPorRol[dados.usuario.role] || 'adm.html';
+
                     setTimeout(() => {
-                        window.location.href = 'adm.html';
-                    }, 1500);
+                        window.location.href = paginaDestino;
+                    }, 1200);
                 } else {
                     mensagemErro.textContent = dados.mensagem || 'Erro ao fazer login.';
                     mensagemErro.style.display = 'block';
