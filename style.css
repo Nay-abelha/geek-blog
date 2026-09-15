@@ -1186,7 +1186,7 @@ img, iframe {
     background-color: #1e4fd6;
 }
 
-/* Badge del rol del usuario */
+/* Badge do papel do usuário */
 .role-badge {
     display: inline-block;
     padding: 2px 10px;
@@ -1235,7 +1235,7 @@ img, iframe {
     color: #00d2ff;
 }
 
-/* Fila del formulario con dos columnas */
+/* Linha do formulário com duas colunas */
 .form-row {
     display: flex;
     gap: 20px;
@@ -1256,7 +1256,7 @@ img, iframe {
     color: #e0e0e0;
 }
 
-/* Tarjetas de estatísticas do dashboard (só admin) */
+/* Cartões de estatísticas do dashboard (só admin) */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1302,7 +1302,7 @@ img, iframe {
     font-size: 0.75rem;
 }
 
-/* Tablas (estatísticas recentes e usuários) */
+/* Tabelas (estatísticas recentes e usuários) */
 .stats-tabla {
     width: 100%;
     border-collapse: collapse;

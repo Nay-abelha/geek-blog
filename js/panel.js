@@ -296,7 +296,7 @@
                     </div>
                 </div>
 
-                <!-- ===== ABA DE ESTADÍSTICAS ===== -->
+                <!-- ===== ABA DE ESTATÍSTICAS ===== -->
                 <div id="aba-estadisticas" class="admin-tab-content" hidden>
                     <h2>📊 Funcionamento do Site</h2>
                     <div class="stats-grid" id="stats-grid">
@@ -809,11 +809,11 @@
             return;
         }
 
-        // 3) Sessão válida e rol correto -> se renderiza o painel
+        // 3) Sessão válida e papel correto -> o painel é renderizado
         renderPanel(container);
         cargarPosts();
 
-        // Eventos de formularios
+        // Eventos de formulários
         document.getElementById('form-post').addEventListener('submit', enviarFormPost);
         if (usuario.role === 'admin') {
             document.getElementById('form-personagem').addEventListener('submit', enviarFormPersonaje);
@@ -821,7 +821,7 @@
         }
     }
 
-    // Exponer funções usadas pelos onclick do HTML gerado
+    // Expor funções usadas pelos onclick do HTML gerado
     window.Panel = {
         mudarAba: mudarAba,
         logout: logout,

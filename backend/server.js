@@ -160,7 +160,7 @@ app.get('/api/posts/painel', autenticarToken, async (req, res) => {
     }
 });
 
-// ROTA 1c: Post individual para edição no painel (protegida), incluye rascunhos
+// ROTA 1c: Post individual para edição no painel (protegida), inclui rascunhos
 app.get('/api/posts/:id/painel', autenticarToken, async (req, res) => {
     try {
         const [posts] = await db.query(`
@@ -554,7 +554,7 @@ app.post('/api/chat', autenticarToken, validarCampos(['mensagem']), async (req, 
 });
 
 // =========================================
-// ROTAS DE GESTION DE USUÁRIOS (Só admin)
+// ROTAS DE GESTÃO DE USUÁRIOS (Só admin)
 // =========================================
 
 // ROTA 16: Listar todos os usuários (Só admin)
