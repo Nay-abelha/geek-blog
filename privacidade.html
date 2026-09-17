@@ -15,7 +15,8 @@
                 <li><a href="index.html">Home</a></li> |
                 <li><a href="Personagens.html">Personagens</a></li> |
                 <li><a href="hqs.html">Promoções de HQs</a></li> |
-                <li><a href="sobre.html">Sobre</a></li>
+                <li><a href="sobre.html">Sobre</a></li> |
+                <li><a href="login.html" id="enlace-login">Login</a></li>
             </ul>
         </nav>
     </header>
@@ -120,6 +121,93 @@
             Ao continuar utilizando nosso site, você concorda com os termos desta Política de Privacidade.
         </p>
     </main>
+    <script>
+        // =========================================
+        // LINK "MEU PAINEL" SEGUNDO ROL (se houver sessão)
+        // =========================================
+        (function() {
+            const enlace = document.getElementById('enlace-login');
+            if (!enlace) return;
+            try {
+                const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
+                if (usuario && localStorage.getItem('token')) {
+                    const paginaPorRol = {
+                        admin: 'adm.html',
+                        editor: 'editor.html',
+                        autor: 'escritor.html'
+                    };
+                    enlace.href = paginaPorRol[usuario.role] || 'adm.html';
+                    enlace.textContent = 'Meu Painel';
+                }
+            } catch (e) { /* sem sessão: mantém o link de Login */ }
+        })();
+
+        // =========================================
+        // BANNER DE COOKIES (LGPD)
+        // =========================================
+        function aceitarCookies() {
+            localStorage.setItem('cookies_aceitos', 'true');
+            document.getElementById('cookie-banner').style.display = 'none';
+        }
+
+        // Verifica se o usuário já aceitou os cookies
+        if (localStorage.getItem('cookies_aceitos') === 'true') {
+            document.getElementById('cookie-banner').style.display = 'none';
+        }
+
+        // =========================================
+        // CARREGAR POSTS DO BANCO (com sanitização XSS)
+        // =========================================
+        async function carregarPostsDoBanco() {
+            try {
+                const resposta = await fetch('http://localhost:3000/api/posts');
+                const posts = await resposta.json();
+
+                console.log('Posts vindos do banco MySQL:', posts);
+
+                if (posts && posts.length > 0) {
+                    const container = document.getElementById('posts-do-banco');
+                    
+                    posts.forEach((post, index) => {
+                        const classeInversao = index % 2 === 0 ? '' : 'row-reverse';
+
+                        // Cria o elemento section
+                        const section = document.createElement('section');
+                        section.className = `weekly-highlight ${classeInversao}`;
+
+                        // Cria o div da imagem
+                        const divImagem = document.createElement('div');
+                        divImagem.className = 'highlight-image';
+                        const img = document.createElement('img');
+                        img.src = post.imagem_capa_url || 'https://via.placeholder.com/800x450?text=GeekBlog';
+                        img.alt = post.titulo;
+                        divImagem.appendChild(img);
+
+                        // Cria o div do texto
+                        const divTexto = document.createElement('div');
+                        divTexto.className = 'highlight-text';
+                        const h1 = document.createElement('h1');
+                        h1.textContent = post.titulo; // textContent previne XSS
+                        const p = document.createElement('p');
+                        p.textContent = post.conteudo; // textContent previne XSS
+                        divTexto.appendChild(h1);
+                        divTexto.appendChild(p);
+
+                        // Monta a estrutura
+                        section.appendChild(divImagem);
+                        section.appendChild(divTexto);
+                        container.appendChild(section);
+                    });
+                }
+            } catch (erro) {
+                console.error('Erro ao buscar dados do banco:', erro);
+            }
+        }
+
+        // Executa ao carregar a página
+        carregarPostsDoBanco();
+    </script>
+
 
 </body>
 </html>
